@@ -15,7 +15,7 @@ export const Registration = () => {
     const register = async (e) => {
         e.target.disabled = true;
         let errorFound = await validate(textFields);
-        setError(errorFound);
+        setError(() => errorFound);
         if(Object.entries(errorFound).length === 0){
             firebase.firestore().collection("Users").add(textFields);
         }
@@ -34,7 +34,7 @@ export const Registration = () => {
                         type="text"
                         className={s.registration__field}
                     />
-                    {error.email && <p className={s.error}>{error.email}</p>}
+                    {error?.email && <p className={s.error}>{error?.email}</p>}
                 </div>
 
                 <div className={s.registration__group}>
@@ -45,7 +45,7 @@ export const Registration = () => {
                         type="text"
                         className={s.registration__field}
                     />
-                    {error.name && <p className={s.error}>{error.name}</p>}
+                    {error?.name && <p className={s.error}>{error?.name}</p>}
                 </div>
 
                 <div className={s.registration__group}>
@@ -56,7 +56,7 @@ export const Registration = () => {
                         type="text"
                         className={s.registration__field}
                     />
-                    {error.surname && <p className={s.error}>{error.surname}</p>}
+                    {error?.surname && <p className={s.error}>{error?.surname}</p>}
                 </div>
 
                 <div className={s.registration__group}>
@@ -67,7 +67,7 @@ export const Registration = () => {
                         type="text"
                         className={s.registration__field}
                     />
-                    {error.displayName && <p className={s.error}>{error.displayName}</p>}
+                    {error?.displayName && <p className={s.error}>{error?.displayName}</p>}
 
                 </div>
 
@@ -80,11 +80,11 @@ export const Registration = () => {
                         type="password"
                         className={s.registration__field}
                     />
-                    {error.password && <p className={s.error}>{error.password}</p>}
+                    {error?.password && <p className={s.error}>{error?.password}</p>}
                 </div>
 
                 <button
-                    className={s.registration__sumbit_btn}
+                    className={s.registration__submit_btn}
                     type="submit"
                     onClick={(e) => register(e)}>Зарегистрироваться</button>
             </form>
