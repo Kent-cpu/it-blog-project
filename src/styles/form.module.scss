@@ -1,0 +1,48 @@
+.form{
+  &__title{
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+  }
+
+  &__group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+  }
+
+  &__wrapper-field{
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  &__field_btn{
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__field_short{
+    font-size: 15px;
+    width: 75%;
+    padding: 7px 0 7px 5px;
+    border: none;
+    border-radius: 5px;
+    &:focus, &:active{
+      outline: none;
+    }
+  }
+
+  &__label{
+    margin-bottom: 2px;
+  }
+}
+
+
+.password-toggle-icon{
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 5px;
+}

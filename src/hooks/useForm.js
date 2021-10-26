@@ -18,11 +18,8 @@ export const useForm = () => {
         });
     }
 
-
-
     return {
         textFields,
-        setTextFields,
         handleChange,
     };
 };

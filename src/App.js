@@ -1,12 +1,21 @@
 import './App.css';
+import {createContext, useState} from "react";
+import {Registration} from "./pages/Registration";
+import {AuthContext} from "./context";
 
 
 function App() {
+  const [isAuth, setIsAuth] = useState(false);
 
   return (
-    <div className="App">
-
+  <AuthContext.Provider value={{
+    isAuth,
+    setIsAuth,
+  }}>
+    <div>
+      <Registration/>
     </div>
+  </AuthContext.Provider>
   );
 }
 

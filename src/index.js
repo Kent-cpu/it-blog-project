@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {createContext, useState} from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import {Registration} from "./pages/Registration";
+import './index.scss';
 import firebase from "firebase/compat";
+import App from "./App";
 
 
 firebase.initializeApp(
@@ -19,7 +19,7 @@ firebase.initializeApp(
 
 ReactDOM.render(
   <React.StrictMode>
-      <Registration/>
+      <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
