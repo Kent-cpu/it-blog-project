@@ -1,7 +1,7 @@
 import './App.css';
-import {createContext, useState} from "react";
-import {Registration} from "./pages/Registration";
+import {useState} from "react";
 import {AuthContext} from "./context";
+import {Header} from "./components/Header";
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
     setIsAuth,
   }}>
     <div>
-      <Registration/>
+      <Header/>
     </div>
   </AuthContext.Provider>
   );
