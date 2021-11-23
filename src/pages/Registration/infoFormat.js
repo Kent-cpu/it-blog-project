@@ -28,7 +28,8 @@ const InfoFormat = (props) => {
         <FontAwesomeIcon
             icon={faInfoCircle}
             style={{
-                fontSize: "17px",
+                fontSize: "18px",
+                color: "#6b6363",
             }}
         />
     );

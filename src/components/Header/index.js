@@ -5,15 +5,20 @@ import {faSearch} from "@fortawesome/free-solid-svg-icons/faSearch";
 import {faPencilAlt} from "@fortawesome/free-solid-svg-icons/faPencilAlt";
 import {AuthContext} from "../../context";
 import {Profile} from "./Profile";
+import {NavLink} from "react-router-dom";
+import {ALL} from "../../utils/constants";
 
 export const Header = () => {
     const {isAuth} = useContext(AuthContext);
+
 
     return (
         <header>
             <div className={s["header__top"]}>
                 <div className="main-container">
-                    <div className= {s["header__logo"]}>Лого</div>
+                    <div className= {s["header__logo"]}>
+                        <NavLink className= {s["header__logo"]} to={ALL}>Лого</NavLink>
+                    </div>
                 </div>
             </div>
 
@@ -65,7 +70,6 @@ export const Header = () => {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </header>

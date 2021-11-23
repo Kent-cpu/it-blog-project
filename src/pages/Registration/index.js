@@ -1,37 +1,56 @@
 import {useContext, useState} from 'react';
 import s from "./../../styles/form.module.scss"
 import 'firebase/firestore'
-import firebase from "firebase/compat";
+import {doc,  setDoc } from "firebase/firestore";
 import {useForm} from "../../hooks/useForm";
 import {validate} from "./validate";
 import {usePasswordToggle} from "../../hooks/usePasswordToggle";
-import {VALIDATION_TYPE} from "../../utils/constants";
+import {LOGIN, VALIDATION_TYPE} from "../../utils/constants";
 import InfoFormat from "./infoFormat";
 import {AuthContext} from "../../context";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import {NavLink} from "react-router-dom";
+
 
 
 export const Registration = () => {
     const {textFields, handleChange} =  useForm();
     const [error, setError] = useState({});
     const [typeInput, iconEye] = usePasswordToggle();
-    const {setIsAuth} = useContext(AuthContext);
+    const {auth, db} = useContext(AuthContext);
+    const bcrypt = require("bcryptjs");
+
 
     const submit = async (e) => {
         e.target.disabled = true;
         let errorFound = await validate(textFields, VALIDATION_TYPE.REGISTRATION);
-        console.log(errorFound);
         setError(() => errorFound);
         if(Object.entries(errorFound).length === 0){
-            firebase.firestore().collection("Users").add(textFields);
+            const hashPassword = bcrypt.hashSync(textFields.password, 10);
+            textFields.password = hashPassword;
+
+            createUserWithEmailAndPassword(auth, textFields.email, textFields.password)
+                .then(async (userCredential) => {
+                    const user = userCredential.user;
+                    if(user){
+                        user.displayName = textFields.nickname;
+                        localStorage.setItem("uid", user.uid);
+                        textFields.uid = user.uid;
+                        await setDoc(doc(db, "Users", textFields.uid), textFields);
+                        sendEmailVerification(auth.currentUser);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err.code, err.message);
+                });
         }
-        setIsAuth(true);
         e.target.disabled = false;
     }
 
 
     return (
         <div className = "centered-container">
-            <form  action="" onSubmit={(e) => e.preventDefault()}>
+            <form className={s["form"]} action="" onSubmit={(e) => e.preventDefault()}>
                 <h1 className={s.form__title}>Регистрация</h1>
                 <div className={s.form__group}>
                     <label className={s.form__label} htmlFor="email">Электронная почта</label>
@@ -46,36 +65,25 @@ export const Registration = () => {
                 </div>
 
                 <div className={s.form__group}>
-                    <label className={s.form__label} htmlFor="name">Имя</label>
+                    <label className={s.form__label} htmlFor="name">Настоящие имя</label>
                     <input
-                        placeholder="Имя"
+                        placeholder="Настоящие имя"
                         onChange={(e) => handleChange(e)}
-                        name = "name"
+                        name = "realName"
                         type="text"
                         className="input-field"
                     />
-                    {error.name && <p className="error-message">{error.name}</p>}
+                    {error.realName && <p className="error-message">{error.realName}</p>}
                 </div>
 
-                <div className={s.form__group}>
-                    <label className={s.form__label} htmlFor="surname">Фамилия</label>
-                    <input
-                        placeholder="Фамилия"
-                        onChange={(e) => handleChange(e)}
-                        name = "surname"
-                        type="text"
-                        className="input-field"
-                    />
-                    {error.surname && <p className="error-message">{error.surname}</p>}
-                </div>
 
                 <div className={s.form__group}>
-                    <label className={s.form__label} htmlFor="displayName">Отображаемое имя</label>
+                    <label className={s.form__label} htmlFor="displayName">Никнейм</label>
                     <div className={s["form__wrapper-field"]}>
                         <input
-                            placeholder="Отображаемое имя"
+                            placeholder="Никнейм"
                             onChange={(e) => handleChange(e)}
-                            name = "displayName"
+                            name = "nickname"
                             type="text"
                             maxLength="15"
                             className={s["form__field_short"]}
@@ -85,7 +93,7 @@ export const Registration = () => {
                         </div>
                     </div>
 
-                    {error.displayName && <p className="error-message">{error.displayName}</p>}
+                    {error.nickname && <p className="error-message">{error.nickname}</p>}
                 </div>
 
                 <div className={s.form__group}>
@@ -111,7 +119,10 @@ export const Registration = () => {
                     className="submit-btn"
                     onClick={(e) => submit(e)}
                 >Создать аккаунт</button>
+
+                <p style={{textAlign: "center"}}>Уже зарегистрированы? <NavLink to={LOGIN}>Войдите</NavLink></p>
             </form>
+
 
         </div>
     );

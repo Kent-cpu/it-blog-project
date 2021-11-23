@@ -3,9 +3,8 @@ import {useState} from 'react';
 export const useForm = () => {
     const [textFields, setTextFields] = useState({
         email: "",
-        name: "",
-        surname: "",
-        displayName: "",
+        realName: "",
+        nickname: "",
         password: "",
     });
 

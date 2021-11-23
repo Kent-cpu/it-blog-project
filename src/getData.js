@@ -7,6 +7,7 @@ export const getData = async (nameCollection) => {
         .get()
         .then((snippetsSnapshot) => {
             data = snippetsSnapshot.docs.map(doc => doc.data());
+            return data;
         });
     return data;
 }

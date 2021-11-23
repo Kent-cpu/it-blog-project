@@ -16,11 +16,13 @@ firebase.initializeApp(
     }
 );
 
+const auth = firebase.auth();
+
 
 ReactDOM.render(
-  <React.StrictMode>
-      <App/>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <App firebase = {firebase} auth = {auth}/>
+    </React.StrictMode>,
   document.getElementById('root')
 );
 

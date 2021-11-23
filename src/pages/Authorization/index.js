@@ -1,33 +1,42 @@
 import React, {useContext, useState} from 'react';
 import {validate} from "../Registration/validate";
-import {VALIDATION_TYPE} from "../../utils/constants";
+import  { REGISTRATION, VALIDATION_TYPE} from "../../utils/constants";
 import {AuthContext} from "../../context";
 import s from "./../../styles/form.module.scss"
 import {usePasswordToggle} from "../../hooks/usePasswordToggle";
 import {useForm} from "../../hooks/useForm";
+import { signInWithEmailAndPassword} from "firebase/auth";
+import {NavLink} from "react-router-dom";
+
+
 
 export const Authorization = () => {
     const {textFields, handleChange} =  useForm();
     const [error, setError] = useState({});
-    const {setIsAuth} = useContext(AuthContext);
+    const {auth} = useContext(AuthContext);
     const [typeInput, iconEye] = usePasswordToggle();
 
 
     const submit = async (e) => {
         e.target.disabled = true;
-        const {email, password} = textFields;
-        let errorFound = await validate({email, password}, VALIDATION_TYPE.AUTHORIZATION);
+        let {email, password} = textFields;
+        const data = {email, password};
+        let errorFound = await validate(data, VALIDATION_TYPE.AUTHORIZATION);
         setError(() => errorFound);
-        if(Object.entries(errorFound).length === 0){
-            setIsAuth(true);
+        if (Object.entries(errorFound).length === 0) {
+                signInWithEmailAndPassword(auth, data.email, data.password).catch((error) => {
+                        console.error(error.code, error.message);
+                    });
+            }
+            e.target.disabled = false;
         }
-        e.target.disabled = false;
-    }
+
 
     return (
         <div className="centered-container">
-            <h1 className={s.form__title}>Войти</h1>
-            <form onClick={(e) => e.preventDefault()} action="">
+
+            <form className={s["form"]} onClick={(e) => e.preventDefault()} action="">
+                <h1 className={s.form__title}>Войти</h1>
                 <div className={s.form__group}>
                     <label className={s.form__label} htmlFor="email">Электронная почта</label>
                     <input
@@ -55,6 +64,8 @@ export const Authorization = () => {
                 </div>
                 {(error.email || error.password) && <p style={{marginBottom:"20px"}} className="error-message">Неверная электронная почта или пароль</p>}
                 <button className="submit-btn" onClick={(e) => submit(e)}>Войти</button>
+
+                <p style={{textAlign: "center"}}>Ещё нет аккаунта? <NavLink to={REGISTRATION}>Зарегистрируйтесь</NavLink></p>
             </form>
         </div>
     );
