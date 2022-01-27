@@ -15,7 +15,6 @@ export const useUpdateEmail = () => {
     const [errorEmailChange, setError] = useState({});
 
 
-
     const validationData = () => {
         const regularEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
         const error = {};
@@ -33,12 +32,11 @@ export const useUpdateEmail = () => {
         }
         setError(error);
 
-        if(Object.entries(error).length === 0){
+        if (Object.entries(error).length === 0) {
             return true;
         }
         return false;
     }
-
 
 
     const updateProfileEmail = (e) => {

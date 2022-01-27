@@ -1,12 +1,20 @@
 import React, {useContext} from 'react';
 import s from "./index.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons/faSearch";
 import {faPencilAlt} from "@fortawesome/free-solid-svg-icons/faPencilAlt";
 import {AuthContext} from "../../context";
 import {Profile} from "./Profile";
 import {NavLink} from "react-router-dom";
-import {ALL} from "../../utils/constants";
+import {
+    ADMINISTATIONPOSTS,
+    ALL,
+    CREATEARTICLE,
+    DESIGNPOSTS,
+    DEVELOPMENTPOSTS,
+    MANAGEMENTPOSTS,
+    POPSCIPOSTS, SEARCH
+} from "../../utils/constants";
 
 export const Header = () => {
     const {isAuth} = useContext(AuthContext);
@@ -16,8 +24,8 @@ export const Header = () => {
         <header>
             <div className={s["header__top"]}>
                 <div className="main-container">
-                    <div className= {s["header__logo"]}>
-                        <NavLink className= {s["header__logo"]} to={ALL}>Лого</NavLink>
+                    <div className={s["header__logo"]}>
+                        <NavLink className={s["header__logo"]} to={ALL}>Лого</NavLink>
                     </div>
                 </div>
             </div>
@@ -29,40 +37,59 @@ export const Header = () => {
                             <nav className="category-posts__nav">
                                 <ul className={s["category-posts__list"]}>
                                     <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Моя лента</a>
+                                        <NavLink to={{
+                                            pathname: DEVELOPMENTPOSTS,
+                                            search: '?mode=development',
+                                        }}
+                                                 className={s["category-posts__link"]}>Разработка</NavLink>
                                     </li>
                                     <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Все потоки</a>
+                                        <NavLink to={{
+                                            pathname: ADMINISTATIONPOSTS,
+                                            search: '?mode=administration',
+                                        }} className={s["category-posts__link"]}>Администрирование</NavLink>
                                     </li>
                                     <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Разработка</a>
+                                        <NavLink to={{
+                                            pathname: DESIGNPOSTS,
+                                            search: '?mode=design',
+                                        }} className={s["category-posts__link"]}>Дизайн</NavLink>
                                     </li>
                                     <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Администрирование</a>
+                                        <NavLink to={{
+                                            pathname: MANAGEMENTPOSTS,
+                                            search: '?mode=management',
+                                        }} className={s["category-posts__link"]}>Менеджмент</NavLink>
                                     </li>
+
                                     <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Дизайн</a>
+                                        <NavLink to={{
+                                            pathname: POPSCIPOSTS,
+                                            search: '?mode=popsci',
+                                        }}
+                                                 className={s["category-posts__link"]}>Научпоп</NavLink>
                                     </li>
-                                    <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Менеджмент</a>
-                                    </li>
-                                    <li className={s["category-posts__item"]}>
-                                        <a className={s["category-posts__link"]} href="">Научпоп</a>
-                                    </li>
+
                                 </ul>
                             </nav>
                         </div>
 
                         <div className={s["user-menu"]}>
                             {isAuth
-                                &&
-                                <div className={s["user-menu__item"]}>
+                            &&
+                            <div className={s["user-menu__item"]}>
+                                <NavLink to={CREATEARTICLE}>
                                     <FontAwesomeIcon className={s["user-menu__create-post"]} icon={faPencilAlt}/>
-                                </div>
-                             }
+                                </NavLink>
+
+                            </div>
+                            }
 
                             <div className={s["user-menu__item"]}>
-                                <FontAwesomeIcon className={s["user-menu__search"]} icon={faSearch}/>
+                                <NavLink to={SEARCH}>
+                                    <FontAwesomeIcon className={s["user-menu__search"]} icon={faSearch}/>
+                                </NavLink>
+
                             </div>
 
                             <div className={s["user-menu__item"]}>

@@ -1,5 +1,4 @@
 .header{
-
   &__top{
     background-color: rgb(48, 59, 68);
   }
@@ -30,7 +29,7 @@
 .category-posts{
   font-family: "Arial";
   &__item{
-    margin-right: 20px;
+    margin-right: 40px;
   }
 
   &__item:last-child{
@@ -169,4 +168,19 @@
       color: rgb(101, 163, 190);
     }
   }
+}
+
+.profile-avatar-wrapper{
+  position: absolute;
+  width: 37px;
+  height: 35px;
+  bottom: -40%;
+}
+
+.profile-avatar{
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 5px;
 }

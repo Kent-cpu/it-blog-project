@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import styles from "./account.module.scss";
 import "./../index.scss";
 import {AuthContext} from "../../../context";
@@ -21,7 +21,7 @@ export const AccountSetting = () => {
                             <input
                                 className="input-field"
                                 name="oldPassword"
-                                // type="password"
+                                type="password"
                                 onChange={(e) => {
                                     setPasswordChange((prevData) => {
                                         return {...prevData, oldPassword: e.target.value}

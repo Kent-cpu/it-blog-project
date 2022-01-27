@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {validate} from "../Registration/validate";
-import  { REGISTRATION, VALIDATION_TYPE} from "../../utils/constants";
+import {REGISTRATION, REMINDERPASSWORD, VALIDATION_TYPE} from "../../utils/constants";
 import {AuthContext} from "../../context";
 import s from "./../../styles/form.module.scss"
 import {usePasswordToggle} from "../../hooks/usePasswordToggle";
@@ -65,8 +65,12 @@ export const Authorization = () => {
                 {(error.email || error.password) && <p style={{marginBottom:"20px"}} className="error-message">Неверная электронная почта или пароль</p>}
                 <button className="submit-btn" onClick={(e) => submit(e)}>Войти</button>
 
-                <p style={{textAlign: "center"}}>Ещё нет аккаунта? <NavLink to={REGISTRATION}>Зарегистрируйтесь</NavLink></p>
+                <NavLink to={REMINDERPASSWORD}>Забыли пароль?</NavLink>
             </form>
+
+            <div className="wrapper-content">
+                <p style={{textAlign: "center"}}>Ещё нет аккаунта? <NavLink to={REGISTRATION}>Зарегистрируйтесь</NavLink></p>
+            </div>
         </div>
     );
 };

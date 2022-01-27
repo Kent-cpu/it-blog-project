@@ -1,16 +1,16 @@
 import {useContext, useState} from 'react';
 import s from "./../../styles/form.module.scss"
 import 'firebase/firestore'
-import {doc,  setDoc } from "firebase/firestore";
+import {doc, setDoc} from "firebase/firestore";
 import {useForm} from "../../hooks/useForm";
 import {validate} from "./validate";
 import {usePasswordToggle} from "../../hooks/usePasswordToggle";
 import {LOGIN, VALIDATION_TYPE} from "../../utils/constants";
 import InfoFormat from "./infoFormat";
 import {AuthContext} from "../../context";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import {createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import {NavLink} from "react-router-dom";
-
+import firebase from "firebase/compat";
 
 
 export const Registration = () => {
@@ -34,10 +34,16 @@ export const Registration = () => {
                     const user = userCredential.user;
                     if(user){
                         user.displayName = textFields.nickname;
-                        localStorage.setItem("uid", user.uid);
                         textFields.uid = user.uid;
+                        const starsRef = firebase.storage().refFromURL('gs://it-blog-c0d57.appspot.com/avatars/defaultAvatarImg.png');
+                        await starsRef.getDownloadURL().then((url) => {
+                            if(url){
+                                textFields.avatar = url;
+                            }
+                        });
+
                         await setDoc(doc(db, "Users", textFields.uid), textFields);
-                        sendEmailVerification(auth.currentUser);
+                        await sendEmailVerification(auth.currentUser);
                     }
                 })
                 .catch((err) => {

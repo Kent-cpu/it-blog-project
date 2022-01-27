@@ -13,14 +13,14 @@ export const InfoSave = ({items, setItems}) => {
 
     return (
         <div className=
-                  {
-                      items.length !== 0 ? styles["info-about-save"] + " " + styles["info-about-save-active"] : styles["info-about-save"]
-                  }
+                 {
+                     items.length !== 0 ? styles["info-about-save"] + " " + styles["info-about-save-active"] : styles["info-about-save"]
+                 }
         >
-            {items.map(( element, index) => {
+            {items.length > 0 && items.map((element, index) => {
 
                 return <InfoSaveItem
-                    index = {element.id}
+                    index={element.id}
                     key={index}
                     text={element.text}
                     items={items}

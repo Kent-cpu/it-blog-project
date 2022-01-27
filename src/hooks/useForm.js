@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {handleChangeInput} from "../handleChangeInput";
 
 export const useForm = () => {
     const [textFields, setTextFields] = useState({
@@ -8,14 +9,7 @@ export const useForm = () => {
         password: "",
     });
 
-    const handleChange = e => {
-        setTextFields(prevData => {
-            return {
-                ...prevData,
-                [e.target.name]: e.target.value,
-            };
-        });
-    }
+    const handleChange = e => handleChangeInput(e, setTextFields);
 
     return {
         textFields,

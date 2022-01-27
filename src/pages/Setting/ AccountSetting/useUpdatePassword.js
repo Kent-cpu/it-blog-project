@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
 import {AuthContext} from "../../../context";
-
 import {signInWithEmailAndPassword, updatePassword} from "firebase/auth";
 import {doc, updateDoc} from "firebase/firestore";
 
@@ -13,7 +12,6 @@ export const useUpdatePassword = () => {
         newPassword: "",
         newPasswordConfirmation: "",
     });
-
     const [errorChangePsw, setErrorChangePsw] = useState({});
 
 
@@ -48,27 +46,23 @@ export const useUpdatePassword = () => {
     }
 
 
-    const updateProfilePassword = (e) => {
-        try {
-            if (validationData()) {
-                const hashPassword = bcrypt.hashSync(passwordChange.newPassword, 10);
-                signInWithEmailAndPassword(auth, userData.email, userData.password).then(() => {
-                    updatePassword(auth.currentUser, hashPassword).then(() => {
-                        const userRef = doc(db, "Users", userData.uid);
-                        updateDoc(userRef, {password: hashPassword,});
-                        setUserData((prevData) => {
-                            return {...prevData, password: hashPassword};
-                        });
-                    }).catch((error) => {
-                        console.log(error)
+    const updateProfilePassword = () => {
+        if (validationData()) {
+            const hashPassword = bcrypt.hashSync(passwordChange.newPassword, 10);
+            signInWithEmailAndPassword(auth, userData.email, userData.password).then(() => {
+                updatePassword(auth.currentUser, hashPassword).then(() => {
+                    const userRef = doc(db, "Users", userData.uid);
+                    updateDoc(userRef, {password: hashPassword,});
+                    setUserData((prevData) => {
+                        return {...prevData, password: hashPassword};
                     });
+
                 }).catch((error) => {
-                    console.error(error.code, error.message);
+                    console.log(error)
                 });
-            }
-
-        } catch (e) {
-
+            }).catch((error) => {
+                console.error(error.code, error.message);
+            });
         }
     }
 

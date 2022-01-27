@@ -4,16 +4,16 @@ import {STATUS} from "./InfoSave";
 
 
 const InfoSaveItem = ({text, index, status, setItems}) => {
-    const ref = useRef();
+        const ref = useRef();
 
         useEffect(() => {
             setTimeout(() => {
-                setItems(prevData => prevData.filter(element => element.id !== index ));
+                setItems(prevData => prevData.filter(element => element.id !== index));
             }, 6000);
 
 
             setTimeout(() => {
-                if(ref.current){
+                if (ref.current) {
                     ref.current.style.transform = "translateY(-100vh)";
                 }
 
@@ -25,8 +25,8 @@ const InfoSaveItem = ({text, index, status, setItems}) => {
         return (
             <div
                 ref={ref}
-                className={ status === STATUS.success ? styles["info-about-save__item"]: styles["info-about-save__item"] + " " + styles["info-about-save__item-error"] }>
-                    {text}
+                className={status === STATUS.success ? styles["info-about-save__item"] : styles["info-about-save__item"] + " " + styles["info-about-save__item-error"]}>
+                {text}
             </div>
         );
     }

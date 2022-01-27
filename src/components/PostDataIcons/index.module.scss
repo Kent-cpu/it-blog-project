@@ -1,0 +1,27 @@
+.post__data-icons{
+  display: flex;
+  align-items: center;
+  &__item{
+    margin-right: 40px;
+
+    &__link{
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    &__counter{
+      color: #798e98;
+    }
+
+    &__icon{
+      color: #bdcdd6;
+      font-size: 16px;
+      margin-right: 7px;
+
+      &-active{
+        color: #548eaa;
+      }
+    }
+  }
+}

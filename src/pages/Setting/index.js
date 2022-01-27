@@ -27,6 +27,7 @@ export const Setting = () => {
                     <h2>Настройки</h2>
                 </div>
                 <div className="wrapper-content">
+
                     <Tabs tabs = {tabs}/>
                 </div>
             </div>
