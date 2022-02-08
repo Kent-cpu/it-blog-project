@@ -43,7 +43,7 @@ export const RecoverPassword = ({actionCode}) => {
                     });
                 }
             } catch (e) {
-                console.log(e);
+                console.error(e);
             }
         }
     }
@@ -75,4 +75,3 @@ export const RecoverPassword = ({actionCode}) => {
         </div>
     );
 };
-

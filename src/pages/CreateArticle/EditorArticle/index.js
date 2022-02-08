@@ -1,125 +1,66 @@
 import React, {useContext, useRef, useState} from 'react';
 import {AuthContext} from "../../../context";
-import styles from "../../Setting/ProfileSetting/index.module.scss";
-import {handleChangeInput} from "../../../handleChangeInput";
+import styles from "../index.module.scss";
+import {handleChangeInput} from "../../../utils/handleChangeInput";
 import {collection, doc, setDoc} from "firebase/firestore";
 import {InfoSave, STATUS} from "../../Setting/InfoSave";
+import CATEGORY_POST from "./../../../utils/categoryPost";
+import createPhrasesByText from "../../../utils/createPhrasesByText";
+import validation from "./validation";
 
-
-
-export const CreatePostWindow = () => {
+export const EditorArticle = () => {
     const {auth, db, userData, firebase} = useContext(AuthContext);
+    const refPreviewImg = useRef();
     const [postData, setPostData] = useState({
         title: "",
         category: "Разработка",
-        previewImg: "",
+        previewImg: refPreviewImg,
         previewText: "",
         text: "",
     });
 
     const [error, setError] = useState({});
     const [infoAboutSave, setInfoAboutSave] = useState([]);
-    const refPreviewImg = useRef();
     const imageConversion = require("image-conversion");
+    const handleChange = e => handleChangeInput(e, setPostData);
 
-    const handleChange = (e) => handleChangeInput(e, setPostData);
-
-    const validation = () => {
-        const err = {};
-        if (postData.title.length === 0) {
-            err.title = "Обязательное поле";
-        }
-
-        if (postData.text.length === 0) {
-            err.text = "Обязательное поле";
-        } else if (postData.text.length <= 50) {
-            err.text = "Слишком маленькая статья";
-        }
-
-        if (!refPreviewImg.current.files[0]) {
-            err.previewImg = "Выберите картинку";
-        }
-
-        if (Object.entries(err).length !== 0) {
-            setError(err);
-            return false;
-        }
-        setError({});
-        return true;
-    }
-
-
-    const getCategoryPost = (category) => {
-        let convertedCategory;
-        switch (category) {
-            case "Разработка":
-                convertedCategory = "development";
-                break;
-            case "Администрирование":
-                convertedCategory = "administration";
-                break;
-            case "Дизайн":
-                convertedCategory = "design";
-                break;
-            case "Менеджмент":
-                convertedCategory = "management";
-                break;
-            case "Научпоп":
-                convertedCategory = "popsci";
-                break;
-        }
-        return convertedCategory;
-    }
-
-    const createIndexTitle = (title) => {
-        const result = [];
-        let prevKey = "";
-        for(let i = 0; i < title.length; ++i) {
-                prevKey+= title[i];
-                result.push(prevKey);
-        }
-        return result;
-    }
 
     const savePost = async () => {
-        if (validation()) {
-            try {
 
-                const categoryPost = getCategoryPost(postData.category);
+        const possibleErrors = validation(postData);
+
+        if (Object.keys(possibleErrors).length === 0) {
+
+            try {
+                const categoryPost = CATEGORY_POST[postData.category];
                 const newPostRef = doc(collection(db, categoryPost));
-                const searchPostRef = doc(collection(db, "search_post"));
                 const linkImg = await saveImg(newPostRef.id, categoryPost);
 
-
                 const finalDataPost = {
+                    ...postData,
                     id: newPostRef.id,
                     uidUser: auth.currentUser.uid,
                     dateCreation: firebase.firestore.Timestamp.now(),
                     creatorNickname: userData.nickname,
                     creatorAvatar: userData.avatar,
                     category: categoryPost,
-                    title: postData.title,
                     previewImg: linkImg,
-                    previewText: postData.previewText,
-                    text: postData.text,
-                    likes: null,
+                    likes: [],
                     comments: [],
                     bookmarks: [],
                 };
 
 
                 const searchPostData = {
-                    idPost:  newPostRef.id,
+                    idPost: newPostRef.id,
                     categoryPost: finalDataPost.category,
-                    searchTableIndex: createIndexTitle(finalDataPost.title),
+                    searchTableIndex: createPhrasesByText(finalDataPost.title),
                     dateCreationPost: finalDataPost.dateCreation,
-
                 };
 
 
-
                 await setDoc(newPostRef, finalDataPost);
-                setDoc(searchPostRef, searchPostData);
+                await setDoc(doc(collection(db, "search_post")), searchPostData);
 
                 window.scrollTo({top: 0, behavior: 'smooth'});
                 setInfoAboutSave((prevData) => [...prevData, {
@@ -129,7 +70,6 @@ export const CreatePostWindow = () => {
                 }]);
 
             } catch (e) {
-
                 window.scrollTo({top: 0, behavior: 'smooth'});
                 setInfoAboutSave((prevData) => [...prevData, {
                     id: prevData[prevData.length - 1]?.id + 1 || 0,
@@ -137,7 +77,8 @@ export const CreatePostWindow = () => {
                     text: e.toString(),
                 }]);
             }
-
+        } else {
+            setError(possibleErrors);
         }
     }
 
@@ -147,18 +88,13 @@ export const CreatePostWindow = () => {
 
         if (file) {
             const storageRef = firebase.storage().refFromURL(`gs://it-blog-c0d57.appspot.com/${category}/${idPost}`);
+            const compressionConfig = {
+                size: (file.size - (file.size * 30 / 100)) / 1000,
+            };
 
-            return imageConversion.compressAccurately(file, {
-                size: (file.size - ((file.size * 30) / 100)) / 1000,
-
-            }).then((result) => {
+            return imageConversion.compressAccurately(file, compressionConfig).then((result) => {
                 return storageRef.put(result).then(() => {
                     return storageRef.getDownloadURL().then(url => {
-
-                        setPostData(prev => {
-                            return {...prev, previewImg: url}
-                        });
-
                         return url;
                     });
                 });
@@ -174,20 +110,28 @@ export const CreatePostWindow = () => {
             <div className="main-container">
                 <div className="wrapper-content">
                     <h1>Создание поста</h1>
-                    <form onSubmit={(e) => e.preventDefault()} className={styles["form"]}>
-                        <div className={styles["form__item"]}>
-                            <label className="form__label" htmlFor="title">Заголовок</label>
+                    <form
+                        className={styles["editor"]}
+                        onSubmit={e => e.preventDefault()}
+                    >
+                        <div className={styles["editor__item"]}>
+                            <label
+                                className="form__label"
+                                htmlFor="title"
+                            >
+                                Заголовок
+                            </label>
                             <input
                                 type="text"
                                 name="title"
-                                className={styles["input-field"]}
+                                className={styles["editor__field"]}
                                 value={postData.title}
-                                onChange={(e) => handleChange(e)}
+                                onChange={handleChange}
                             />
                             {error.title && <p className="error-message">{error.title}</p>}
                         </div>
 
-                        <div className={styles["form__item"]}>
+                        <div className={styles["editor__item"]}>
                             <input
                                 type="file"
                                 name="previewImg"
@@ -199,12 +143,12 @@ export const CreatePostWindow = () => {
                         </div>
 
 
-                        <div className={styles["form__item"]}>
+                        <div className={styles["editor__item"]}>
                             <span className="form__label">Категория</span>
                             <select
                                 name="category"
-                                className={styles["select-css"]}
-                                onChange={(e) => handleChange(e)}
+                                className="select"
+                                onChange={handleChange}
                                 value={postData.category}
                             >
                                 <option>Разработка</option>
@@ -215,19 +159,11 @@ export const CreatePostWindow = () => {
                             </select>
                         </div>
 
-                        <div className={styles["form__item"]}>
+                        <div className={styles["editor__item"]}>
                             <label htmlFor="previewText" className="form__label">Предварительный текст</label>
                             <textarea
-                                style={{
-                                    resize: "none",
-                                    width: "98%",
-                                    height: "200px",
-                                    padding: "15px 10px 0 10px",
-                                    fontSize: "16px",
-                                    border: "1px solid #d5dddf",
-                                    marginBottom: "8px",
-                                }}
-                                onChange={(e) => handleChange(e)}
+                                className={styles["editor__text-sm"]}
+                                onChange={handleChange}
                                 value={postData.previewText}
                                 name="previewText"
                                 maxLength="1000"
@@ -236,19 +172,11 @@ export const CreatePostWindow = () => {
                         </div>
 
 
-                        <div className={styles["form__item"]}>
+                        <div className={styles["editor__item"]}>
                             <label htmlFor="text" className="form__label">Текст поста</label>
                             <textarea
-                                style={{
-                                    resize: "none",
-                                    width: "98%",
-                                    height: "800px",
-                                    padding: "15px 10px 0 10px",
-                                    fontSize: "16px",
-                                    border: "1px solid #d5dddf",
-                                    marginBottom: "8px",
-                                }}
-                                onChange={(e) => handleChange(e)}
+                                className={styles["editor__text-lg"]}
+                                onChange={handleChange}
                                 value={postData.text}
                                 name="text"
                                 maxLength="600000"
@@ -258,7 +186,8 @@ export const CreatePostWindow = () => {
                         <button
                             className="save-changes-btn"
                             onClick={savePost}
-                        >Готово к публикации
+                        >
+                            Готово к публикации
                         </button>
                     </form>
                 </div>

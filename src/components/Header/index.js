@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import s from "./index.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons/faSearch";
@@ -7,21 +7,21 @@ import {AuthContext} from "../../context";
 import {Profile} from "./Profile";
 import {NavLink} from "react-router-dom";
 import {
-    ADMINISTATIONPOSTS,
+    ADMINISTRATION_POSTS,
     ALL,
-    CREATEARTICLE,
-    DESIGNPOSTS,
-    DEVELOPMENTPOSTS,
-    MANAGEMENTPOSTS,
-    POPSCIPOSTS, SEARCH
+    CREATE_ARTICLE,
+    DESIGN_POSTS,
+    DEVELOPMENT_POSTS,
+    MANAGEMENT_POSTS,
+    POPSCI_POSTS, SEARCH
 } from "../../utils/constants";
 
-export const Header = () => {
+const Header = () => {
     const {isAuth} = useContext(AuthContext);
 
 
     return (
-        <header>
+        <header style={{marginBottom: "25px"}}>
             <div className={s["header__top"]}>
                 <div className="main-container">
                     <div className={s["header__logo"]}>
@@ -37,37 +37,42 @@ export const Header = () => {
                             <nav className="category-posts__nav">
                                 <ul className={s["category-posts__list"]}>
                                     <li className={s["category-posts__item"]}>
-                                        <NavLink to={{
-                                            pathname: DEVELOPMENTPOSTS,
-                                            search: '?mode=development',
-                                        }}
-                                                 className={s["category-posts__link"]}>Разработка</NavLink>
+                                        <NavLink
+                                            to={{
+                                                pathname: DEVELOPMENT_POSTS,
+                                                search: '?mode=development',
+                                            }}
+                                            className={s["category-posts__link"]}>Разработка</NavLink>
                                     </li>
                                     <li className={s["category-posts__item"]}>
-                                        <NavLink to={{
-                                            pathname: ADMINISTATIONPOSTS,
-                                            search: '?mode=administration',
-                                        }} className={s["category-posts__link"]}>Администрирование</NavLink>
+                                        <NavLink
+                                            to={{
+                                                pathname: ADMINISTRATION_POSTS,
+                                                search: '?mode=administration',
+                                            }} className={s["category-posts__link"]}>Администрирование</NavLink>
                                     </li>
                                     <li className={s["category-posts__item"]}>
-                                        <NavLink to={{
-                                            pathname: DESIGNPOSTS,
-                                            search: '?mode=design',
-                                        }} className={s["category-posts__link"]}>Дизайн</NavLink>
+                                        <NavLink
+                                            to={{
+                                                pathname: DESIGN_POSTS,
+                                                search: '?mode=design',
+                                            }} className={s["category-posts__link"]}>Дизайн</NavLink>
                                     </li>
                                     <li className={s["category-posts__item"]}>
-                                        <NavLink to={{
-                                            pathname: MANAGEMENTPOSTS,
-                                            search: '?mode=management',
-                                        }} className={s["category-posts__link"]}>Менеджмент</NavLink>
+                                        <NavLink
+                                            to={{
+                                                pathname: MANAGEMENT_POSTS,
+                                                search: '?mode=management',
+                                            }} className={s["category-posts__link"]}>Менеджмент</NavLink>
                                     </li>
 
                                     <li className={s["category-posts__item"]}>
-                                        <NavLink to={{
-                                            pathname: POPSCIPOSTS,
-                                            search: '?mode=popsci',
-                                        }}
-                                                 className={s["category-posts__link"]}>Научпоп</NavLink>
+                                        <NavLink
+                                            to={{
+                                                pathname: POPSCI_POSTS,
+                                                search: '?mode=popsci',
+                                            }}
+                                            className={s["category-posts__link"]}>Научпоп</NavLink>
                                     </li>
 
                                 </ul>
@@ -76,13 +81,13 @@ export const Header = () => {
 
                         <div className={s["user-menu"]}>
                             {isAuth
-                            &&
-                            <div className={s["user-menu__item"]}>
-                                <NavLink to={CREATEARTICLE}>
-                                    <FontAwesomeIcon className={s["user-menu__create-post"]} icon={faPencilAlt}/>
-                                </NavLink>
+                                &&
+                                <div className={s["user-menu__item"]}>
+                                    <NavLink to={CREATE_ARTICLE}>
+                                        <FontAwesomeIcon className={s["user-menu__create-post"]} icon={faPencilAlt}/>
+                                    </NavLink>
 
-                            </div>
+                                </div>
                             }
 
                             <div className={s["user-menu__item"]}>
@@ -103,3 +108,4 @@ export const Header = () => {
     );
 };
 
+export default Header;

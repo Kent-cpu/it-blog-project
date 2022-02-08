@@ -7,7 +7,6 @@ export const STATUS = {
     success: "Ok",
 };
 
-
 export const InfoSave = ({items, setItems}) => {
 
 
@@ -30,4 +29,3 @@ export const InfoSave = ({items, setItems}) => {
         </div>
     );
 };
-

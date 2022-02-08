@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useLocation} from "react-router-dom";
-import {Header} from "../../components/Header";
 import previewPostStyles from "../../components/PreviewPost/index.module.scss";
 import postStyles from "./index.module.scss";
 import {Comments} from "./Comments/Comments";
@@ -9,6 +8,7 @@ import Loader from "react-loader-spinner";
 import {AuthContext} from "../../context";
 import {doc, getDoc} from "firebase/firestore";
 import moment from "moment-timezone";
+import uploadAvatarCreatorPosts from "../../utils/uploadAvatarCreatorPosts";
 
 
 export const Post = () => {
@@ -17,20 +17,18 @@ export const Post = () => {
     const [isLoader, setIsLoader] = useState(true);
     const {db} = useContext(AuthContext);
 
+
     const convertTime = (time) => {
-        return moment.unix(time.seconds).locale("ru").format("LLL")
+        return moment.unix(time.seconds).locale("ru").format("LLL");
     }
 
     const getPost = async () => {
-        const postRef = doc(db, dataPost.category, dataPost.id);
-        const post = await getDoc(postRef);
+        const post = await getDoc(doc(db, dataPost.category, dataPost.id));
         const currentDataPost = post.data();
-
+        await uploadAvatarCreatorPosts([currentDataPost]);
         currentDataPost.dateCreation = convertTime(currentDataPost.dateCreation);
-
         setDataPost(currentDataPost);
         setIsLoader(false);
-        console.log(dataPost)
     }
 
     useEffect(async () => {
@@ -40,18 +38,14 @@ export const Post = () => {
 
     return (
         <div>
-            <Header/>
+
             <div className="main-container">
                 {isLoader === true ?
                     <div className="centered-container"><Loader type="BallTriangle"/></div>
                     :
                     <div style={{marginTop: "30px"}}>
-
                         <div className={previewPostStyles["post"]}>
-
                             <div className={previewPostStyles["post__creator-info"]}>
-
-
                                 <div className={previewPostStyles["post__creator-info__avatar-container"]}>
                                     <img className={previewPostStyles["post__creator-info__avatar"]}
                                          src={dataPost.creatorAvatar} alt=""/>
@@ -75,20 +69,20 @@ export const Post = () => {
                                 <p>{dataPost.text}</p>
                             </div>
 
-                            <PostDataIcons category={dataPost.category} postId={dataPost.id}
-                                           bookmarks={dataPost.bookmarks}
-                                           numberComments={dataPost.comments}/>
+                            <PostDataIcons
+                                postId={dataPost.id}
+                                category={dataPost.category}
+                                likes={dataPost.likes}
+                                bookmarks={dataPost.bookmarks}
+                                numberComments={dataPost.comments}/>
                         </div>
                         <Comments
                             postId={dataPost.id}
                             category={dataPost.category}
                         />
                     </div>
-
                 }
-
             </div>
         </div>
     );
 };
-

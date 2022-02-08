@@ -24,12 +24,10 @@ export const CommentItem = ({
                                 likes
                             }) => {
 
-
     const {auth} = useContext(AuthContext);
     const [boxReplyComment, setBoxReplyComment] = useState(false);
     const [lookAnswer, setLookAnswer] = useState(true);
-    const isReplying = auth?.currentUser?.uid == creatorUID;
-
+    const isReplying = auth?.currentUser !== null && auth?.currentUser?.uid !== creatorUID;
     const isLike = likes?.includes(auth?.currentUser?.uid);
 
     const getNumberRepliedComments = (repliesCommentsLength) => {
@@ -63,12 +61,11 @@ export const CommentItem = ({
                         setBoxReplyComment={setBoxReplyComment}
                         postId={postId}
                         category={category}
-
                     />
                     :
                     <div className={s["comments__footer"]}>
                         {
-                            !isReplying &&
+                            isReplying &&
                             <div className={s["comments__footer__item"]}>
                                 <button
                                     type="button"
@@ -80,9 +77,7 @@ export const CommentItem = ({
                             </div>
                         }
 
-
                         <div onClick={() => addLikeComment(commentId)} className={s["comments__footer__item"]}>
-
                             <FontAwesomeIcon
                                 icon={isLike ? heartSolid : heartRegular}
                                 className={isLike ?
@@ -93,10 +88,7 @@ export const CommentItem = ({
                             />
                             <span>{likes?.length}</span>
                         </div>
-
-
                     </div>
-
             }
 
             {replies?.length > 0 && (
@@ -117,14 +109,13 @@ export const CommentItem = ({
                                 icon={faCaretUp}
                                 className={s["comments__look-more__icon"]}
                             />
-                            <p className={s["comments__look-more__text"]} >Скрыть
-                                ответы</p>
+                            <p className={s["comments__look-more__text"]}>Скрыть ответы</p>
                         </div>
 
                         {
-                            replies.map((comment, index) => {
+                            replies.map(comment => {
                                 return <CommentItem
-                                    key={index}
+                                    key={comment.uid}
                                     commentId={comment.uid}
                                     likes={comment.likes}
                                     addLikeComment={addLikeComment}
@@ -147,4 +138,3 @@ export const CommentItem = ({
         </div>
     );
 };
-

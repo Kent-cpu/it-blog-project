@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Route, Switch, Redirect} from "react-router-dom";
 import {privateRouters, publicRouters} from "../router";
 import {AuthContext} from "../context";
-import {DEVELOPMENTPOSTS} from "../utils/constants";
+import {DEVELOPMENT_POSTS} from "../utils/constants";
 
 const AppRouter = () => {
     const {isAuth} = useContext(AuthContext);
@@ -12,11 +12,12 @@ const AppRouter = () => {
             <Switch>
                 {
                     privateRouters.map(({path, Component}) =>
-                        <Route key={path} path={path} component={Component} exact/>
+                        <Route key={path} path={path} component={Component} exact />
                     )
                 }
+
                 <Redirect exact={true} to={{
-                    pathname: DEVELOPMENTPOSTS,
+                    pathname: DEVELOPMENT_POSTS,
                     search: '?mode=development',
                 }}/>
             </Switch>
@@ -31,7 +32,7 @@ const AppRouter = () => {
                 }
 
                 <Redirect exact={true} to={{
-                    pathname: DEVELOPMENTPOSTS,
+                    pathname: DEVELOPMENT_POSTS,
                     search: '?mode=development',
                 }}/>
             </Switch>

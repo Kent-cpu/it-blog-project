@@ -1,17 +1,17 @@
 import {
-    ADMINISTATIONPOSTS,
-    CHANGEDATA,
-    CREATEARTICLE,
-    DESIGNPOSTS,
-    DEVELOPMENTPOSTS,
+    ADMINISTRATION_POSTS,
+    CHANGE_DATA,
+    CREATE_ARTICLE,
+    DESIGN_POSTS,
+    DEVELOPMENT_POSTS,
     LOGIN,
-    MANAGEMENTPOSTS,
-    POPSCIPOSTS,
+    MANAGEMENT_POSTS,
+    POPSCI_POSTS,
     POST,
     REGISTRATION,
-    REMINDERPASSWORD,
+    REMINDER_PASSWORD,
     SEARCH,
-    SETTING
+    SETTING, USER_PROFILE, USER_PROFILE_POSTS
 } from "./utils/constants";
 import {Authorization} from "./pages/Authorization";
 import {Registration} from "./pages/Registration";
@@ -22,6 +22,7 @@ import {ReminderPassword} from "./pages/ReminderPassword";
 import {ChangeData} from "./pages/ChangeData";
 import {Posts} from "./pages/Posts";
 import {Post} from "./pages/Post";
+import {UserProfile} from "./pages/UsersProfile";
 
 export const publicRouters = [
 
@@ -41,37 +42,37 @@ export const publicRouters = [
     },
 
     {
-        path: REMINDERPASSWORD,
+        path: REMINDER_PASSWORD,
         Component: ReminderPassword,
     },
 
     {
-        path: CHANGEDATA,
+        path: CHANGE_DATA,
         Component: ChangeData,
     },
 
     {
-        path: DEVELOPMENTPOSTS,
+        path: DEVELOPMENT_POSTS,
         Component: Posts,
     },
 
     {
-        path: MANAGEMENTPOSTS,
+        path: MANAGEMENT_POSTS,
         Component: Posts,
     },
 
     {
-        path: ADMINISTATIONPOSTS,
+        path: ADMINISTRATION_POSTS,
         Component: Posts,
     },
 
     {
-        path: DESIGNPOSTS,
+        path: DESIGN_POSTS,
         Component: Posts,
     },
 
     {
-        path: POPSCIPOSTS,
+        path: POPSCI_POSTS,
         Component: Posts,
     },
 
@@ -88,49 +89,58 @@ export const privateRouters = [
         Component: Search,
     },
 
-
     {
         path: SETTING,
         Component: Setting,
     },
 
     {
-        path: CREATEARTICLE,
+        path: CREATE_ARTICLE,
         Component: CreateArticle,
     },
 
     {
-        path: CHANGEDATA,
+        path: CHANGE_DATA,
         Component: ChangeData,
     },
 
     {
-        path: DEVELOPMENTPOSTS,
+        path: DEVELOPMENT_POSTS,
         Component: Posts,
     },
 
     {
-        path: MANAGEMENTPOSTS,
+        path: MANAGEMENT_POSTS,
         Component: Posts,
     },
 
     {
-        path: ADMINISTATIONPOSTS,
+        path: ADMINISTRATION_POSTS,
         Component: Posts,
     },
 
     {
-        path: DESIGNPOSTS,
+        path: DESIGN_POSTS,
         Component: Posts,
     },
 
     {
-        path: POPSCIPOSTS,
+        path: POPSCI_POSTS,
         Component: Posts,
     },
 
     {
         path: POST,
         Component: Post,
+    },
+
+    {
+        path: USER_PROFILE,
+        Component: UserProfile,
+    },
+
+    {
+        path: USER_PROFILE_POSTS,
+        Component: UserProfile,
     }
 ];

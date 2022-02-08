@@ -39,15 +39,18 @@ export const Registration = () => {
                         await starsRef.getDownloadURL().then((url) => {
                             if(url){
                                 textFields.avatar = url;
+                                const storageRef = firebase.storage().refFromURL(`gs://it-blog-c0d57.appspot.com/avatars/${textFields.uid}`);
+                                fetch(`${url}`)
+                                    .then((result) => result.blob())
+                                    .then((defaultImgBlob) => storageRef.put(defaultImgBlob));
                             }
                         });
-
                         await setDoc(doc(db, "Users", textFields.uid), textFields);
                         await sendEmailVerification(auth.currentUser);
                     }
                 })
                 .catch((err) => {
-                    console.log(err.code, err.message);
+                    console.error(err.code, err.message);
                 });
         }
         e.target.disabled = false;
@@ -128,8 +131,6 @@ export const Registration = () => {
 
                 <p style={{textAlign: "center"}}>Уже зарегистрированы? <NavLink to={LOGIN}>Войдите</NavLink></p>
             </form>
-
-
         </div>
     );
 };

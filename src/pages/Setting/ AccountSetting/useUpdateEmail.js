@@ -24,7 +24,6 @@ export const useUpdateEmail = () => {
             error.email = "Неверный формат";
         }
 
-
         if (emailChange.passwordConfirmation.length === 0) {
             error.passwordConfirmation = "Обязательное поле";
         } else if (!bcrypt.compareSync(emailChange.passwordConfirmation, userData.password)) {
@@ -53,7 +52,7 @@ export const useUpdateEmail = () => {
                             return {...prevData, email: emailChange.newEmail};
                         });
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                     });
                     e.target.disabled = false;
                 }).catch((error) => {

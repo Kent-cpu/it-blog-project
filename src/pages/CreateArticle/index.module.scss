@@ -1,0 +1,38 @@
+
+.editor{
+  margin-top: 40px;
+
+  &__item{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+  }
+
+  &__field{
+    border-radius: 3px;
+    padding: 0 8px;
+    margin-bottom: 8px;
+    width: 450px;
+    height: 35px;
+    border: 1px solid #d5dddf;
+    font-size: 14px;
+  }
+
+  &__text-lg {
+    height: 800px;
+  }
+
+  &__text-sm {
+    height: 200px;
+  }
+
+  &__text-lg, &__text-sm {
+    resize: none;
+    width: 98%;
+    padding: 15px 10px 0 10px;
+    fontSize: 16px;
+    border: 1px solid #d5dddf;
+    marginBottom: 8px;
+  }
+
+}

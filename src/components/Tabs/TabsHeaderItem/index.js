@@ -20,9 +20,8 @@ export const TabsHeaderItem = ({text, active, onClick}) => {
                             styles["tabs-header-item__title"])
                     ]}
 
-                    >{text}</span>
+                >{text}</span>
             </div>
         </div>
     );
 };
-

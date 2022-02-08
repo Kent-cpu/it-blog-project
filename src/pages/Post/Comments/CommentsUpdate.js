@@ -7,11 +7,10 @@ export const CommentsUpdate = ({downloadComments}) => {
 
     return (
         <div onClick={downloadComments} className={s["comments__update"]}>
-                <FontAwesomeIcon
-                    icon={faSync}
-                    className={s["comments__update__btn"]}
-                />
-
+            <FontAwesomeIcon
+                icon={faSync}
+                className={s["comments__update__btn"]}
+            />
         </div>
     );
 };

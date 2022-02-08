@@ -1,49 +1,58 @@
 import React, {useContext, useState} from 'react';
 import s from "./index.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faComments, faBookmark} from "@fortawesome/free-solid-svg-icons";
+import {faComments, faBookmark, faHeart} from "@fortawesome/free-solid-svg-icons";
 import {doc, updateDoc} from "firebase/firestore";
 import {AuthContext} from "../../context";
 
-export const PostDataIcons = ({postId, category, numberComments, bookmarks}) => {
-
+export const PostDataIcons = ({postId, category, numberComments, bookmarks, likes}) => {
     const {db, auth} = useContext(AuthContext);
-    const [bookmarked, setBookmarked] = useState(searchMatchesBookmarks());
+    const [bookmarked, setBookmarked] = useState(searchMatches(bookmarks));
+    const [liked, setLiked] = useState(searchMatches(likes));
 
-    function searchMatchesBookmarks() {
-        return bookmarks.includes(auth?.currentUser?.uid, 0);
+    function searchMatches(data) {
+        return data.includes(auth?.currentUser?.uid, 0);
     }
 
-    const addBookmarks = async () => {
-        if(bookmarked && auth?.currentUser){
+    const addOrDeleteLikeOrBookmark = async (setFunc, active, data, nameFieldUpdate) => {
+        if (auth?.currentUser) {
 
-            const index = bookmarks.indexOf(auth.currentUser.uid, 0);
-
-            bookmarks.splice(index, 1);
-            await updateDoc(doc(db, category, postId), {
-                bookmarks: [
-                    ...bookmarks
-                ]
-            });
-
-            setBookmarked(false);
-        }else{
-            if(auth?.currentUser){
-                bookmarks.push(auth.currentUser.uid);
-                await updateDoc(doc(db, category, postId), {
-                    bookmarks: [
-                        ...bookmarks
-                    ]
-                });
-                setBookmarked(true);
+            if (active) {
+                data.splice(data.indexOf(auth.currentUser.uid, 0), 1);
+                setFunc(false);
+            } else {
+                data.push(auth.currentUser.uid);
+                setFunc(true);
             }
 
+            await updateDoc(doc(db, category, postId), {
+                [nameFieldUpdate]: [...data],
+            });
         }
-
     }
+
 
     return (
         <div className={s["post__data-icons"]}>
+
+            <div onClick={() => addOrDeleteLikeOrBookmark(setLiked, liked, likes, "likes")}
+                 className={s["post__data-icons__item"]}>
+                    <span className={s["post__data-icons__item__link"]}>
+                        <FontAwesomeIcon
+                            icon={faHeart}
+                            className={liked === true
+                                ?
+                                s["post__data-icons__item__icon"] + " " + s["post__data-icons__item__icon-active"]
+                                :
+                                s["post__data-icons__item__icon"]
+
+                            }
+                        />
+                    <span className={s["post__data-icons__item__counter"]}>{likes?.length}</span>
+                    </span>
+            </div>
+
+
             <div className={s["post__data-icons__item"]}>
                 <a className={s["post__data-icons__item__link"]} href="#!">
                     <FontAwesomeIcon
@@ -54,23 +63,21 @@ export const PostDataIcons = ({postId, category, numberComments, bookmarks}) => 
                 </a>
             </div>
 
-            <div className={s["post__data-icons__item"]}>
-                    <span onClick={addBookmarks}>
+            <div onClick={() => addOrDeleteLikeOrBookmark(setBookmarked, bookmarked, bookmarks, "bookmarks")}
+                 className={s["post__data-icons__item"]}>
+                    <span className={s["post__data-icons__item__link"]}>
                         <FontAwesomeIcon
                             icon={faBookmark}
-                            className={bookmarked == true
+                            className={bookmarked === true
                                 ?
                                 s["post__data-icons__item__icon"] + " " + s["post__data-icons__item__icon-active"]
                                 :
                                 s["post__data-icons__item__icon"]
-
-                        }
+                            }
                         />
                     <span className={s["post__data-icons__item__counter"]}>{bookmarks?.length}</span>
                     </span>
             </div>
-
         </div>
     );
 };
-

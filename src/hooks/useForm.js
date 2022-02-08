@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {handleChangeInput} from "../handleChangeInput";
+import {handleChangeInput} from "../utils/handleChangeInput";
 
 export const useForm = () => {
     const [textFields, setTextFields] = useState({

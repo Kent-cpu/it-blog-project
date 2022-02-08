@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
-import {Header} from "../../components/Header";
-import {CreatePostWindow} from "./CreatePostWindow";
+import {EditorArticle} from "./EditorArticle";
 import {TimerVerifiedEmail} from "./TimerVerifiedEmail";
 import {AuthContext} from "../../context";
 
@@ -9,11 +8,11 @@ export const CreateArticle = () => {
 
     return (
         <div>
-            <Header/>
+
             <div className="main-container">
                 {
                     //
-                        <CreatePostWindow/>
+                        <EditorArticle/>
                         // :
                         // <TimerVerifiedEmail/>
                 }

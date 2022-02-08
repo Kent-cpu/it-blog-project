@@ -7,6 +7,7 @@ export const TabsHeader = ({tabs, activeIndex, onTabClick}) => {
     const handleClick = index => {
         onTabClick(index);
     }
+
     return (
         <div className={styles["tabs-header__container"]}>
             {

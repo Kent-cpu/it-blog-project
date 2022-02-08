@@ -58,7 +58,7 @@ export const useUpdatePassword = () => {
                     });
 
                 }).catch((error) => {
-                    console.log(error)
+                    console.error(error)
                 });
             }).catch((error) => {
                 console.error(error.code, error.message);
@@ -67,6 +67,4 @@ export const useUpdatePassword = () => {
     }
 
     return [setPasswordChange, errorChangePsw, updateProfilePassword];
-
 };
-

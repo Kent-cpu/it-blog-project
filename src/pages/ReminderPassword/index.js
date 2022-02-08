@@ -12,10 +12,10 @@ export const ReminderPassword = (props) => {
 
     const validate = () => {
         const regularEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
-        if(email.length === 0){
+        if (email.length === 0) {
             setError("Введите email");
             return false;
-        }else if(!regularEmail.test(email)){
+        } else if (!regularEmail.test(email)) {
             setError("Введите корректный email");
             return false;
         }
@@ -25,14 +25,13 @@ export const ReminderPassword = (props) => {
 
 
     const submit = () => {
-        if(validate()){
+        if (validate()) {
             sendPasswordResetEmail(auth, email)
                 .then((r) => {
                     setSentLetter(true);
                 })
                 .catch((error) => {
                     const errorCode = error.code;
-                    const errorMessage = error.message;
                 });
         }
     }
@@ -45,14 +44,16 @@ export const ReminderPassword = (props) => {
 
                 {
                     sentLetter === true
-                    ?
+                        ?
                         <div style={{
                             maxWidth: "350px",
                             backgroundColor: "#65AB5B",
                             padding: "20px",
                             color: "#fff",
                         }}>
-                            Мы отправили вам на почту инструкции по восстановлению пароля. Чтобы восстановить доступ к аккаунту, пройдите по ссылке из письма. Если этого письма нет во «Входящих», пожалуйста, проверьте «Спам».
+                            Мы отправили вам на почту инструкции по восстановлению пароля. Чтобы восстановить доступ к
+                            аккаунту, пройдите по ссылке из письма. Если этого письма нет во «Входящих», пожалуйста,
+                            проверьте «Спам».
                         </div>
                         :
                         <div>

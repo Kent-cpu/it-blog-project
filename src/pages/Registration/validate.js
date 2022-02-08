@@ -9,7 +9,6 @@ export const validate = async (values, validationType) => {
     const regularPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/; // пароль от 6, содержит хотя бы 1 цифру , 1 заглавную и 1 строчную букву
     const bcrypt = require("bcryptjs");
 
-
     if (!values.realName && values?.realName?.length === 0) {
         error.realName = "Обязательное поле";
     }
@@ -66,7 +65,6 @@ export const validate = async (values, validationType) => {
             }
         }
     }
-
 
     return error;
 }

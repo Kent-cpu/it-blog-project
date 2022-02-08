@@ -7,7 +7,7 @@ import {faCog} from "@fortawesome/free-solid-svg-icons/faCog";
 import {faChalkboardTeacher} from "@fortawesome/free-solid-svg-icons/faChalkboardTeacher";
 import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
 import {NavLink} from "react-router-dom";
-import {LOGIN, REGISTRATION, SETTING} from "../../utils/constants";
+import {LOGIN, REGISTRATION, SETTING, USER_PROFILE} from "../../utils/constants";
 import {signOut} from "firebase/auth";
 
 
@@ -19,13 +19,24 @@ export const Profile = () => {
 
     const exit = () => {
         signOut(auth).catch((error) => {
-            console.log(error)
+            console.error(error)
         });
     }
 
 
     useEffect(() => {
-        const clickOutsideEl = e => !e.target.contains(rootEl.current) || setIsVisible(false);
+        const clickOutsideEl = e => {
+            setIsVisible(current => {
+                if (current && rootEl.current.contains(e.target)) { // если клик происходит внутри профиля
+                    return false;
+                } else if (!rootEl.current.contains(e.target)) { // если клик происходит вне блока
+                    return false;
+                } else {
+                    return true;
+                }
+            })
+        }
+
         document.addEventListener("click", clickOutsideEl);
         return () => document.removeEventListener('click', clickOutsideEl);
     }, []);
@@ -33,7 +44,7 @@ export const Profile = () => {
 
     return (
         <div ref={rootEl}>
-            <div onClick={() => setIsVisible(prev => !prev)}>
+            <div>
                 {
                     auth.currentUser
                         ?
@@ -55,7 +66,11 @@ export const Profile = () => {
                     <div
                         className={isVisible ? s["user-menu__dropdown"] + " " + s["user-menu__dropdown_active"] : s["user-menu__dropdown"]}>
                         <div className={s["user-menu__dropdown__body"]}>
-                            <a className={s["user-menu__dropdown__body__link"]} href="">Мои профиль</a>
+                            <NavLink to={{
+                                pathname: `${USER_PROFILE}`,
+                                search: `?nickname=${userData.nickname}`
+                            }} className={s["user-menu__dropdown__body__link"]}>Мои
+                                профиль</NavLink>
                             <a className={s["user-menu__dropdown__body__link"]} href="">Статьи</a>
                             <a className={s["user-menu__dropdown__body__link"]} href="">Закладки</a>
                             <a className={s["user-menu__dropdown__body__link"]} href="">Комментарии</a>
@@ -97,8 +112,9 @@ export const Profile = () => {
 
                         <div className={s["user-menu__dropdown__footer"]}>
                             <div className={s["user-menu__dropdown__footer__item"]}>
-                                <FontAwesomeIcon className={s["user-menu__dropdown__footer__icon"]}
-                                                 icon={faChalkboardTeacher}/>
+                                <FontAwesomeIcon
+                                    className={s["user-menu__dropdown__footer__icon"]}
+                                    icon={faChalkboardTeacher}/>
                                 <span>Язык, лента</span>
                             </div>
                         </div>

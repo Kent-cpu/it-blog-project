@@ -4,8 +4,9 @@ import {doc, updateDoc} from "firebase/firestore";
 import styles from "./index.module.scss"
 import "./../index.scss"
 import {InfoSave, STATUS} from "../InfoSave";
-import {handleChangeInput} from "../../../handleChangeInput";
+import {handleChangeInput} from "../../../utils/handleChangeInput";
 import firebase from "firebase/compat";
+import changeImg from "../../../utils/changeImg";
 
 
 export const ProfileSetting = () => {
@@ -16,31 +17,26 @@ export const ProfileSetting = () => {
     const imageConversion = require("image-conversion");
 
     const handleChange = (e) => handleChangeInput(e, setData);
+    const changeImgClick = (e) =>  changeImg(e, document.getElementById("avatar"));
 
-    const onOrOfInterface = (onOrOf) => {
-        const allInput = document.querySelectorAll("input");
-        const allSelect = document.querySelectorAll("select");
-        const allButton = document.querySelectorAll("button");
-        const allTextarea = document.querySelectorAll("textarea");
+    const onOrOfInterface = onOrOf => {
+        const allElementInterface = document.querySelectorAll("input, textarea, button, select");
 
-        [...allInput, ...allSelect, ...allButton, ...allTextarea].forEach(element => {
+        allElementInterface.forEach(element => {
             element.disabled = onOrOf;
         });
-
     }
 
     const saveChange = async () => {
-
         try {
             onOrOfInterface(true);
 
             const linkSaveImg = await saveImg()
-            const resultData = {...data, avatar: linkSaveImg};
-            updateDoc(doc(db, "Users", data.uid), data);
+            const resultData = {...data, avatar: linkSaveImg != undefined && linkSaveImg};
+            await updateDoc(doc(db, "Users", resultData.uid), resultData);
             setUserData(resultData);
 
             window.scrollTo({top: 0, behavior: 'smooth'});
-
             onOrOfInterface(false);
 
             setInfoAboutSave((prevData) => [...prevData, {
@@ -59,16 +55,6 @@ export const ProfileSetting = () => {
     }
 
 
-    const changeImg =  (e) => {
-        if (e.target.files[0]) {
-            const reader = new FileReader();
-            reader.readAsDataURL(e.target.files[0]);
-            reader.onload = function () {
-                document.getElementById("avatar").src = reader.result;
-            }
-        }
-    }
-
     const saveImg = async () => {
         const file = avatarRef.current.files[0];
 
@@ -80,7 +66,6 @@ export const ProfileSetting = () => {
                 const storageRef = firebase.storage().refFromURL(`gs://it-blog-c0d57.appspot.com/avatars/${userData.uid}`);
                 return storageRef.put(result).then(() => {
                     return storageRef.getDownloadURL().then(url => {
-
                         return url;
                     });
                 });
@@ -104,7 +89,7 @@ export const ProfileSetting = () => {
                             name="realName"
                             className={styles["input-field"]}
                             value={data?.realName || ''}
-                            onChange={(e) => handleChange(e)}
+                            onChange={handleChange}
                         />
                         <p className={styles["field-description"]}>Укажите ваши имя и фамилию, чтобы другие пользователи
                             смогли узнать, как вас зовут</p>
@@ -122,11 +107,10 @@ export const ProfileSetting = () => {
                             accept="image/*"
                             id="avatar"
                             ref={avatarRef}
-                            onChange={(e) => changeImg(e)}
+                            onChange={changeImgClick}
                         />
                     </div>
                 </div>
-
 
                 <div className={styles["form__item"]}>
                     <label className="form__label" htmlFor="specialization">Специализация</label>
@@ -134,7 +118,7 @@ export const ProfileSetting = () => {
                         type="text"
                         name="specialization"
                         value={data?.specialization || ''}
-                        onChange={(e) => handleChange(e)}
+                        onChange={handleChange}
                         className={styles["input-field"]}
                     />
                     <p className={styles["field-description"]}>Укажите свою специализацию. Например: Администратор баз
@@ -143,20 +127,19 @@ export const ProfileSetting = () => {
 
                 <div className={styles["form__item"]}>
                     <span className="form__label">Пол</span>
-                    <select name="gender" onChange={(e) => handleChange(e)} value={data?.gender || ''}
+                    <select name="gender" onChange={handleChange} value={data?.gender || ''}
                             className={styles["select-css"]}>
                         <option>Мужской</option>
                         <option>Женский</option>
                     </select>
                 </div>
 
-
                 <div className={styles["form__item"]}>
                     <label className="form__label">Дата рождения</label>
                     <input
                         type="date"
                         name="dateOfBirth"
-                        onChange={(e) => handleChange(e)}
+                        onChange={handleChange}
                         value={data?.dateOfBirth || ''}
                         className={styles["input-field-date"]}/>
                 </div>
@@ -167,7 +150,7 @@ export const ProfileSetting = () => {
                         name="aboutMe"
                         maxLength="30000"
                         value={data?.aboutMe || ''}
-                        onChange={(e) => handleChange(e)}
+                        onChange={handleChange}
                         className={styles["user-information-field"]}></textarea>
                     <p className={styles["field-description"]}>Не более 30000 символов</p>
                 </div>
