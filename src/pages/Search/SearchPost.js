@@ -13,7 +13,7 @@ const searchForMatchesType = {
     oldTitle: "old-title",
 }
 
-export const SearchPost = ({searchStatesByNewTitle, setSearchStatesByNewTitle, searchText}) => {
+const SearchPost = ({searchStatesByNewTitle, setSearchStatesByNewTitle, searchText}) => {
 
     const {db} = useContext(AuthContext);
     const lastUploadedPost = useRef("");
@@ -91,7 +91,7 @@ export const SearchPost = ({searchStatesByNewTitle, setSearchStatesByNewTitle, s
                     <div>
                         {
                             suitablePosts.map((post, index) => {
-                                return <PreviewPost key={index}
+                                return <PreviewPost key={post.id}
                                                     id={post.id}
                                                     category={post.category}
                                                     title={post.title}
@@ -115,3 +115,5 @@ export const SearchPost = ({searchStatesByNewTitle, setSearchStatesByNewTitle, s
         </div>
     );
 };
+
+export default SearchPost;

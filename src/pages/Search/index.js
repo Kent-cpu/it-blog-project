@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import s from "./index.module.scss";
-import {SearchPost} from "./SearchPost";
+import SearchPost from "./SearchPost";
 import Tabs from "../../components/Tabs";
 
 const Search = () => {
-    const [searchText, setSearchText] = useState("");
     const [searchStates, setSearchStates] = useState(false);
+    const searchText = useRef("");
 
     const tabs = [
         {
@@ -13,7 +13,8 @@ const Search = () => {
             renderContent: () => <SearchPost
                                     searchStatesByNewTitle={searchStates}
                                     setSearchStatesByNewTitle={setSearchStates}
-                                    searchText={searchText}/>
+                                    searchText={searchText.current.value}
+            />
         },
 
         // {
@@ -27,9 +28,6 @@ const Search = () => {
         setSearchStates(true);
     }
 
-    const onChangeInputSearch = (e) => {
-        setSearchText(e.target.value);
-    }
 
     return (
         <div>
@@ -41,8 +39,7 @@ const Search = () => {
                             className={s["search-field"]}
                             placeholder="Поиск"
                             autoFocus={true}
-                            value={searchText}
-                            onChange={onChangeInputSearch}
+                            ref={searchText}
                         />
                     </form>
                 </div>
