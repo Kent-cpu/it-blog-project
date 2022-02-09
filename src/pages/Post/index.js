@@ -9,6 +9,8 @@ import {AuthContext} from "../../context";
 import {doc, getDoc} from "firebase/firestore";
 import moment from "moment-timezone";
 import uploadAvatarCreatorPosts from "../../utils/uploadAvatarCreatorPosts";
+import categoryPost from "../../utils/categoryPost";
+import {convertLangCategoryPost} from "../../utils/convertLangCategoryPost";
 
 
 export const Post = () => {
@@ -16,7 +18,7 @@ export const Post = () => {
     const [dataPost, setDataPost] = useState(location.state[0]);
     const [isLoader, setIsLoader] = useState(true);
     const {db} = useContext(AuthContext);
-
+    const categoryView = convertLangCategoryPost(dataPost.category);
 
     const convertTime = (time) => {
         return moment.unix(time.seconds).locale("ru").format("LLL");
@@ -43,21 +45,27 @@ export const Post = () => {
                 {isLoader === true ?
                     <div className="centered-container"><Loader type="BallTriangle"/></div>
                     :
-                    <div style={{marginTop: "30px"}}>
+                    <div>
                         <div className={previewPostStyles["post"]}>
                             <div className={previewPostStyles["post__creator-info"]}>
                                 <div className={previewPostStyles["post__creator-info__avatar-container"]}>
-                                    <img className={previewPostStyles["post__creator-info__avatar"]}
-                                         src={dataPost.creatorAvatar} alt=""/>
+                                    <img
+                                        className={previewPostStyles["post__creator-info__avatar"]}
+                                        src={dataPost.creatorAvatar}
+                                        alt=""/>
                                 </div>
                                 <span>{dataPost.creatorNickname}</span>
                                 <p className={previewPostStyles["post__creator-info__data-creation"]}>{dataPost.dateCreation}</p>
                             </div>
 
                             <h3 href={"!#"} className={previewPostStyles["post__title"]}>{dataPost.title}</h3>
+                            <p className={previewPostStyles["post__category"]}>Категория: {categoryView}</p>
+
                             <div className={previewPostStyles["post__preview-img-container"]}>
-                                <img className={previewPostStyles["post__preview-img"]} src={dataPost.previewImg}
-                                     alt=""/>
+                                <img
+                                    className={previewPostStyles["post__preview-img"]}
+                                    src={dataPost.previewImg}
+                                    alt=""/>
                             </div>
 
                             <div>

@@ -2,10 +2,12 @@ import React from 'react';
 import s from "./index.module.scss"
 import {useHistory} from "react-router-dom";
 import {PostDataIcons} from "../PostDataIcons";
+import {convertLangCategoryPost} from "../../utils/convertLangCategoryPost";
 
 
 export const PreviewPost = (postInfo) => {
     const router = useHistory();
+    const categoryView = convertLangCategoryPost(postInfo.category);
 
     const openPost = () => {
         router.push(`/post`, [postInfo]);
@@ -22,8 +24,10 @@ export const PreviewPost = (postInfo) => {
                 <p className={s["post__creator-info__data-creation"]}>{postInfo.dateCreation}</p>
             </div>
 
-            <div style={{marginBottom: "20px"}}>
+
+            <div className={s["post__body"]}>
                 <p onClick={openPost} className={s["post__title"]}>{postInfo.title}</p>
+                <p className={s["post__category"]}>Категория: {categoryView}</p>
                 <div className={s["post__preview-img-container"]}>
                     <img className={s["post__preview-img"]} src={postInfo.previewImg} alt=""/>
                 </div>
