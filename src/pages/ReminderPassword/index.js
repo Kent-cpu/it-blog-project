@@ -3,7 +3,7 @@ import s from "./../../styles/form.module.scss";
 import {sendPasswordResetEmail} from "firebase/auth";
 import {AuthContext} from "../../context";
 
-export const ReminderPassword = (props) => {
+const ReminderPassword = (props) => {
     const [email, setEmail] = useState('');
     const [sentLetter, setSentLetter] = useState(false);
     const [error, setError] = useState("");
@@ -75,3 +75,5 @@ export const ReminderPassword = (props) => {
         </div>
     );
 };
+
+export default ReminderPassword;

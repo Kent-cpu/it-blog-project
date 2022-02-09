@@ -10,7 +10,7 @@ import {NavLink} from "react-router-dom";
 
 
 
-export const Authorization = () => {
+const Authorization = () => {
     const {textFields, handleChange} =  useForm();
     const [error, setError] = useState({});
     const {auth} = useContext(AuthContext);
@@ -74,3 +74,4 @@ export const Authorization = () => {
         </div>
     );
 };
+export default Authorization;

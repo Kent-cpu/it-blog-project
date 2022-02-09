@@ -3,7 +3,7 @@ import {EditorArticle} from "./EditorArticle";
 import {TimerVerifiedEmail} from "./TimerVerifiedEmail";
 import {AuthContext} from "../../context";
 
-export const CreateArticle = () => {
+const CreateArticle = () => {
     const {auth} = useContext(AuthContext);
 
     return (
@@ -21,3 +21,4 @@ export const CreateArticle = () => {
     );
 };
 
+export default CreateArticle;

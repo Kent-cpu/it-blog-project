@@ -3,7 +3,7 @@ import s from "./index.module.scss";
 import {SearchPost} from "./SearchPost";
 import Tabs from "../../components/Tabs";
 
-export const Search = () => {
+const Search = () => {
     const [searchText, setSearchText] = useState("");
     const [searchStates, setSearchStates] = useState(false);
 
@@ -51,3 +51,5 @@ export const Search = () => {
         </div>
     );
 };
+
+export default Search;

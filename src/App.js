@@ -58,7 +58,6 @@ function App(props) {
                     {hideHeaderPages.filter(page => page === location.pathname).length === 0 && <Header/>}
                     <AppRouter/>
                 </div>
-
             }
         </AuthContext.Provider>
     );

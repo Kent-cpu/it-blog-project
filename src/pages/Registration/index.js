@@ -13,7 +13,7 @@ import {NavLink} from "react-router-dom";
 import firebase from "firebase/compat";
 
 
-export const Registration = () => {
+const Registration = () => {
     const {textFields, handleChange} =  useForm();
     const [error, setError] = useState({});
     const [typeInput, iconEye] = usePasswordToggle();
@@ -134,3 +134,5 @@ export const Registration = () => {
         </div>
     );
 };
+
+export default Registration;

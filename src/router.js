@@ -13,16 +13,18 @@ import {
     SEARCH,
     SETTING, USER_PROFILE, USER_PROFILE_POSTS
 } from "./utils/constants";
-import {Authorization} from "./pages/Authorization";
-import {Registration} from "./pages/Registration";
-import {Search} from "./pages/Search";
-import {ProfileSetting, Setting} from "./pages/Setting";
-import {CreateArticle} from "./pages/CreateArticle";
-import {ReminderPassword} from "./pages/ReminderPassword";
-import {ChangeData} from "./pages/ChangeData";
+import {Setting} from "./pages/Setting";
 import {Posts} from "./pages/Posts";
 import {Post} from "./pages/Post";
 import {UserProfile} from "./pages/UsersProfile";
+import React from "react";
+
+const Authorization = React.lazy(() => import("./pages/Authorization"));
+const Registration = React.lazy(() => import("./pages/Registration"));
+const ReminderPassword = React.lazy(() => import("./pages/ReminderPassword"));
+const CreateArticle = React.lazy(() => import("./pages/CreateArticle"));
+const Search = React.lazy(() => import("./pages/Search"));
+const ChangeData = React.lazy(() => import("./pages/ChangeData"));
 
 export const publicRouters = [
 

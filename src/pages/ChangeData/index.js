@@ -5,7 +5,7 @@ import {applyActionCode} from "firebase/auth";
 import {useLocation} from "react-router-dom";
 
 
-export const ChangeData = () => {
+const ChangeData = () => {
     const {auth} = useContext(AuthContext);
     const linkParameters =  new URLSearchParams(useLocation().search);
 
@@ -32,3 +32,4 @@ export const ChangeData = () => {
     );
 };
 
+export default ChangeData;
